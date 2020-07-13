@@ -764,7 +764,8 @@ public class CbOfferwall {
         this._connectionType = "connectionType";
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo info = cm.getActiveNetworkInfo();
+            @SuppressWarnings("deprecation") NetworkInfo info = cm.getActiveNetworkInfo();
+            //noinspection deprecation
             if (info == null || !info.isConnected()) {
                 this._connectionType = "unknown"; //not connected
                 return;
