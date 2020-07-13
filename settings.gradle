@@ -1,2 +1,3 @@
+include ':cbofferwallsdk'
 include ':app'
 rootProject.name = "CinchbucksOfferwallExample"
