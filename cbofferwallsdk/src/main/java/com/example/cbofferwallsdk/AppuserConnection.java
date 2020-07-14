@@ -38,11 +38,15 @@ public class AppuserConnection {
     byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
+        Log.d(TAG, "creating connection "+connection.toString());
         try {
+            Log.d(TAG, "within try block of getUrlBytes");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Log.d(TAG, "out "+out.toString());
             InputStream in = connection.getInputStream();
+            Log.d(TAG, "in "+in.toString());
 
+            Log.d(TAG, "http response code "+connection.getResponseCode());
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 return null;
             }
@@ -53,8 +57,10 @@ public class AppuserConnection {
                 out.write(buffer, 0, bytesRead);
             }
             out.close();
+            Log.d(TAG, out.toString());
             return out.toByteArray();
         } finally {
+            Log.d(TAG, "Connection disconnected");
             connection.disconnect();
         }
     }
@@ -68,6 +74,7 @@ public class AppuserConnection {
     }
 
     public String getAppuserId() throws JSONException {
+        Log.d(TAG, "Within getAppuserId");
         String jsonString = "";
         try {
             String url;
@@ -97,18 +104,18 @@ public class AppuserConnection {
             }
 
             url = urlBuilder.toString();
-
+            Log.d(TAG, "url "+url);
             URL urlOutput = new URL(url);
             URI uri = null;
             try {
                 uri = new URI(urlOutput.getProtocol(), urlOutput.getUserInfo(), urlOutput.getHost(), urlOutput.getPort(), urlOutput.getPath(), urlOutput.getQuery(), urlOutput.getRef());
             } catch (Exception e) {
-
+                Log.d(TAG, "Exceptipn "+e.toString());
             }
             urlOutput = uri.toURL();
-
+            Log.d(TAG, "urlOutput "+urlOutput.toString());
             jsonString = getUrl(urlOutput.toString());
-
+            Log.d(TAG,"jsonString" + jsonString.toString());
             try {
                 JSONObject object = new JSONObject(jsonString);
 

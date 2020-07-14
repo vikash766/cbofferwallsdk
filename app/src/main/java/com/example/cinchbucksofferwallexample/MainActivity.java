@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements CbOfferwallReward
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "Button is clicked");
                 if (CbOfferwall.getInstance().isSurveyAvailable()) {
                     // for second placement to earn Gems as well as Tokens
 //                    CbOfferwall.getInstance().showRewardCenter("66cb0225-3af3-4d63-8920-7a7a9e43abb2");

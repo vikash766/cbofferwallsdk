@@ -19,6 +19,7 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -428,6 +429,7 @@ public class CbOfferwall {
             if (CbOfferwall.getInstance()._appuserId != null && CbOfferwall.getInstance()._appuserId.length() > 1) {
                 if (CbOfferwall.getInstance()._parentContext != null && CbOfferwall.getInstance()._parentContext.get() != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CbOfferwall.getInstance().getParentContext());
+                    Log.d("CbOfferwall", "putString theoremReachAppuserId");
                     prefs.edit().putString("theoremReachAppuserId", CbOfferwall.getInstance()._appuserId).apply();
                 }
 
@@ -867,14 +869,15 @@ public class CbOfferwall {
     }
 
     public String getAppuserId() {
+        Log.d(TAG, "Within getAppUserUserId");
         if (this._appuserId == null || this._appuserId.length() < 1) {
             if (CbOfferwall.getInstance()._parentContext != null && CbOfferwall.getInstance()._parentContext.get() != null) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CbOfferwall.getInstance().getParentContext());
-
+                Log.d(TAG, "App user Id is null ");
                 return prefs.getString("theoremReachAppuserId", null);
             }
         }
-
+        Log.d(TAG, "appUserId is "+this._appuserId);
         return this._appuserId;
     }
 
@@ -1032,6 +1035,7 @@ public class CbOfferwall {
     }
 
     public boolean isSurveyAvailable() {
+        Log.d(TAG, "Within isSurvyeAvaiable");
         if (CbOfferwall.getInstance().getAppuserId() == null || CbOfferwall.getInstance()._googleAdvertiserId == null) {
             CbOfferwall.getInstance().setGoogleAdvertiserId();
             return false;
