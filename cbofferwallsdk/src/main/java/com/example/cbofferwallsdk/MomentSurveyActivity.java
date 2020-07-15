@@ -40,7 +40,7 @@ public class MomentSurveyActivity extends RewardCenterActivity {
         if (url != null) {
             String path = url.getPath();
 
-            if ((url.getHost().equals("theoremreach.com")) || (url.getHost().equals("staging.theoremreach.com"))) {
+            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com.com"))) {
                 if (path.contains("moments_result/success")) {
                     if (!finished) {
                         CbOfferwall.getInstance().onMomentSurveyCompleted();

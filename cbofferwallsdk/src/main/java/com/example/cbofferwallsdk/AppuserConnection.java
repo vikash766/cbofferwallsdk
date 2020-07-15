@@ -70,7 +70,7 @@ public class AppuserConnection {
     }
 
     private String getUrlPrefix() {
-        return  "https://theoremreach.com/api/sdk/v1/";
+        return  "https://cbofferwall-srv2.kondgekar.com.com/api/sdk/v1/";
     }
 
     public String getAppuserId() throws JSONException {
@@ -227,7 +227,7 @@ public class AppuserConnection {
         try {
             String url;
 
-            String rewardUrl = "https://theoremreach.com/api/sdk/v2/appusers/" + CbOfferwall.getInstance().getAppuserId() + "/appuser_rewards?api_key=" + CbOfferwall.getInstance().getApiKey();
+            String rewardUrl = "https://cbofferwall-srv2.kondgekar.com.com/api/sdk/v2/appusers/" + CbOfferwall.getInstance().getAppuserId() + "/appuser_rewards?api_key=" + CbOfferwall.getInstance().getApiKey();
 
             String encryptedString = this.getMd5Hash(rewardUrl + "12fb172e94cfcb20dd65c315336b919f");
             String urlString = rewardUrl + "&enc=" + encryptedString;
