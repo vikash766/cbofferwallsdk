@@ -356,7 +356,7 @@ public class CbOfferwall {
         }
 
         this._surveyUrl = urlBuilder.toString();
-
+        Log.d(TAG, "generateRewardCenterURL "+this._surveyUrl);
     }
 
     private void generateSurveyEntryURL() {

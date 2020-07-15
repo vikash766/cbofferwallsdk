@@ -115,7 +115,7 @@ public class AppuserConnection {
             urlOutput = uri.toURL();
             Log.d(TAG, "urlOutput "+urlOutput.toString());
             jsonString = getUrl(urlOutput.toString());
-            Log.d(TAG,"jsonString" + jsonString.toString());
+            Log.d(TAG,"getAppuserId " + jsonString.toString());
             try {
                 JSONObject object = new JSONObject(jsonString);
 
@@ -266,6 +266,7 @@ public class AppuserConnection {
             String input = "{\"api_key\": \"" + CbOfferwall.getInstance().getApiKey() + "\",\"appuser_reward_ids\": " + "\"" + CbOfferwall.getInstance().getRewardIds() + "\"" + "}";
 
             URL url = new URL(urlString);
+            Log.d(TAG, "grantUserReward "+url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
@@ -299,6 +300,8 @@ public class AppuserConnection {
 
             String urlString = getUrlPrefix() + "appusers/" + appuserId + "/start_new_appuser_session";
 
+            Log.d(TAG, "createSurveySession "+urlString);
+
             URL url = new URL(urlString);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -307,6 +310,8 @@ public class AppuserConnection {
             conn.setRequestProperty("Content-Type", "application/json");
 
             String input = "{\"api_key\": \"" + CbOfferwall.getInstance().getApiKey() + "\"" + "}";
+
+            Log.d(TAG, "post body "+input);
 
             OutputStream os = conn.getOutputStream();
             os.write(input.getBytes());
@@ -317,7 +322,6 @@ public class AppuserConnection {
 
             String output;
             while ((output = br.readLine()) != null) {
-
             }
 
             conn.disconnect();
