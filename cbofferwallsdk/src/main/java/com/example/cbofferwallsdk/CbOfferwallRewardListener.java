@@ -2,7 +2,7 @@
 package com.example.cbofferwallsdk;
 
 /**
- * Created by thammond on 12/22/15.
+ * Created by sudarshan on 15/07/2020.
  */
 
 public abstract interface CbOfferwallRewardListener
