@@ -1019,7 +1019,7 @@ public class CbOfferwall {
     }
 
     private String getUrlPrefix() {
-        return  "https://cbofferwall-srv2.kondgekar.com.com/";
+        return  "https://cbofferwall-srv2.kondgekar.com/";
     }
 
     public void setUnityObjectName(String objectName) {

@@ -66,7 +66,7 @@ public class RewardCenterActivity
         RelativeLayout survey_layout = generateSurveyLayout();
 
         this._baseUrl = CbOfferwall.getInstance().getSurveyUrl();
-        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com.com/sdk/v1/appuser_abandoned_campaign?id=" + CbOfferwall.getInstance().getAppuserId();
+        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/sdk/v1/appuser_abandoned_campaign?id=" + CbOfferwall.getInstance().getAppuserId();
         setOrientationPermission();
         initUI();
 
@@ -140,7 +140,7 @@ public class RewardCenterActivity
                 }
 
                 if (url != null) {
-                    if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com.com"))) {
+                    if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
                         closeRewardCenter();
                         return true;
                     } else {
@@ -388,7 +388,7 @@ public class RewardCenterActivity
 
         if (url != null) {
             String path = url.getPath();
-            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com.com"))) {
+            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
                 closeRewardCenter();
                 return;
             }
@@ -410,7 +410,7 @@ public class RewardCenterActivity
         if (url != null) {
             String path = url.getPath();
 
-            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com.com"))) {
+            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
                 if (path.contains("pulley/finish")) {
                     closeRewardCenter();
                     return;
