@@ -66,7 +66,7 @@ public class RewardCenterActivity
         RelativeLayout survey_layout = generateSurveyLayout();
 
         this._baseUrl = RapidoReach.getInstance().getSurveyUrl();
-        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/sdk/v1/appuser_abandoned_campaign?id=" + RapidoReach.getInstance().getAppuserId();
+        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/api/sdk/v1/appuser_abandoned_campaign?id=" + RapidoReach.getInstance().getAppuserId();
         setOrientationPermission();
         initUI();
 
