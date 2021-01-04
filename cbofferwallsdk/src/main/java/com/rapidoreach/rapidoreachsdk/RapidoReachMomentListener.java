@@ -1,4 +1,4 @@
-package com.example.cbofferwallsdk;
+package com.rapidoreach.rapidoreachsdk;
 
 /**
  * Created by thammond on 1/27/18.

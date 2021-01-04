@@ -1,4 +1,4 @@
-package com.example.cbofferwallsdk;
+package com.rapidoreach.rapidoreachsdk;
 
 import android.content.ComponentName;
 import android.content.Context;

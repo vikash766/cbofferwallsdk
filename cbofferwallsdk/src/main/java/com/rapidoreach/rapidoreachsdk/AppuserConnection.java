@@ -1,4 +1,4 @@
-package com.example.cbofferwallsdk;
+package com.rapidoreach.rapidoreachsdk;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.example.cbofferwallsdk.RapidoReach.SDK_VERSION;
+import static com.rapidoreach.rapidoreachsdk.RapidoReach.SDK_VERSION;
 
 /**
  * Created by thammond on 12/23/15.

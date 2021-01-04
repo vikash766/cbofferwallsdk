@@ -1,10 +1,10 @@
-package com.example.cbofferwallsdk;
+package com.rapidoreach.rapidoreachsdk;
 
 import android.os.Bundle;
 import android.webkit.WebView;
 
-import com.example.cbofferwallsdk.RapidoReach;
-import com.example.cbofferwallsdk.RewardCenterActivity;
+import com.rapidoreach.rapidoreachsdk.RapidoReach;
+import com.rapidoreach.rapidoreachsdk.RewardCenterActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
