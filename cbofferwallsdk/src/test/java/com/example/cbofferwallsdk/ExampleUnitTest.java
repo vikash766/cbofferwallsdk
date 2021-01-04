@@ -1,4 +1,4 @@
-package com.example.cbofferwallsdk;
+package com.rapidoreach.rapidoreachsdk;
 
 import org.junit.Test;
 

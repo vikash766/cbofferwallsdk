@@ -909,7 +909,7 @@ public class RapidoReach {
         RapidoReach.getInstance().surveyAvailable = surveyAvailable;
 
         if (RapidoReach.getInstance()._surveyAvailableListener != null) {
-            RapidoReach.getInstance().getSurveyAvailableListener().cbofferwallSurveyAvailable(surveyAvailable);
+            RapidoReach.getInstance().getSurveyAvailableListener().rapidoReachSurveyAvailable(surveyAvailable);
         }
 
         if (RapidoReach.getInstance()._unityObjectName != null) {

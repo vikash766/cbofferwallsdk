@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.cbofferwallsdk.RapidoReach;
-import com.example.cbofferwallsdk.RapidoReachRewardListener;
-import com.example.cbofferwallsdk.RapidoReachSurveyAvailableListener;
-import com.example.cbofferwallsdk.RapidoReachSurveyListener;
+import com.rapidoreach.rapidoreachsdk.RapidoReach;
+import com.rapidoreach.rapidoreachsdk.RapidoReachRewardListener;
+import com.rapidoreach.rapidoreachsdk.RapidoReachSurveyAvailableListener;
+import com.rapidoreach.rapidoreachsdk.RapidoReachSurveyListener;
 
 public class MainActivity extends AppCompatActivity implements RapidoReachRewardListener, RapidoReachSurveyListener, RapidoReachSurveyAvailableListener  {
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements RapidoReachReward
     }
 
     @Override
-    public void cbofferwallSurveyAvailable(boolean surveyAvailable) {
+    public void rapidoReachSurveyAvailable(boolean surveyAvailable) {
         Log.d(TAG, "RapidoReach Survey Available: " + surveyAvailable);
 
     }
