@@ -3,7 +3,7 @@ package com.example.cbofferwallsdk;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-import com.example.cbofferwallsdk.CbOfferwall;
+import com.example.cbofferwallsdk.RapidoReach;
 import com.example.cbofferwallsdk.RewardCenterActivity;
 
 import java.net.MalformedURLException;
@@ -18,7 +18,7 @@ public class MomentSurveyActivity extends RewardCenterActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (CbOfferwall.getInstance().isMomentsTitleBarEnabled()) {
+        if (RapidoReach.getInstance().isMomentsTitleBarEnabled()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } else {
             getSupportActionBar().hide();
@@ -43,14 +43,14 @@ public class MomentSurveyActivity extends RewardCenterActivity {
             if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
                 if (path.contains("moments_result/success")) {
                     if (!finished) {
-                        CbOfferwall.getInstance().onMomentSurveyCompleted();
+                        RapidoReach.getInstance().onMomentSurveyCompleted();
 
                         closeRewardCenter();
                         return;
                     }
                 } else if (path.contains("moments_result/term")) {
                     if (!finished) {
-                        CbOfferwall.getInstance().onMomentSurveyNotEligible();
+                        RapidoReach.getInstance().onMomentSurveyNotEligible();
 
                         closeRewardCenter();
                         return;
@@ -71,10 +71,10 @@ public class MomentSurveyActivity extends RewardCenterActivity {
     @Override
     protected void closeRewardCenter() {
         if (!finished) {
-            CbOfferwall.getInstance().onMomentSurveyClosed();
+            RapidoReach.getInstance().onMomentSurveyClosed();
         }
         finished = true;
-        CbOfferwall.getInstance().momentSurveyOpen = false;
+        RapidoReach.getInstance().momentSurveyOpen = false;
         finish();
     }
 

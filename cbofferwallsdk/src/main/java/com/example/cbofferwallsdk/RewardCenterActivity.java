@@ -65,8 +65,8 @@ public class RewardCenterActivity
 
         RelativeLayout survey_layout = generateSurveyLayout();
 
-        this._baseUrl = CbOfferwall.getInstance().getSurveyUrl();
-        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/sdk/v1/appuser_abandoned_campaign?id=" + CbOfferwall.getInstance().getAppuserId();
+        this._baseUrl = RapidoReach.getInstance().getSurveyUrl();
+        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/sdk/v1/appuser_abandoned_campaign?id=" + RapidoReach.getInstance().getAppuserId();
         setOrientationPermission();
         initUI();
 
@@ -85,8 +85,8 @@ public class RewardCenterActivity
     protected void onStop() {
         super.onStop();
 
-        if (CbOfferwall.getInstance().getUnityEarnedContent() > 0) {
-            CbOfferwall.getInstance().unityAwardNotification();
+        if (RapidoReach.getInstance().getUnityEarnedContent() > 0) {
+            RapidoReach.getInstance().unityAwardNotification();
         }
 
         updateSharedPreferences(false);
@@ -100,9 +100,9 @@ public class RewardCenterActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if (CbOfferwall.getInstance().getOverrideRefreshButtonURL() != null && CbOfferwall.getInstance().getOverrideRefreshButton() != null) {
+        if (RapidoReach.getInstance().getOverrideRefreshButtonURL() != null && RapidoReach.getInstance().getOverrideRefreshButton() != null) {
 
-            Drawable drawable = CbOfferwall.getInstance().getOverrideRefreshButton();
+            Drawable drawable = RapidoReach.getInstance().getOverrideRefreshButton();
 
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Drawable newDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 100, 100, true));
@@ -116,7 +116,7 @@ public class RewardCenterActivity
 
         Drawable drawable = menu.getItem(0).getIcon();
         drawable.mutate();
-        drawable.setColorFilter(Color.parseColor(CbOfferwall.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
+        drawable.setColorFilter(Color.parseColor(RapidoReach.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
 
         return true;
     }
@@ -125,7 +125,7 @@ public class RewardCenterActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (CbOfferwall.getInstance().momentSurveyOpen) {
+                if (RapidoReach.getInstance().momentSurveyOpen) {
                     closeRewardCenter();
                     return true;
                 }
@@ -213,10 +213,10 @@ public class RewardCenterActivity
         toolbar.setLayoutParams(myLayoutParams);
 
         toolbar.setPopupTheme(R.style.LibraryTheme);
-        toolbar.setBackgroundColor(Color.parseColor(CbOfferwall.getInstance().getNavigationBarColor()));
+        toolbar.setBackgroundColor(Color.parseColor(RapidoReach.getInstance().getNavigationBarColor()));
 
         //find Unity alternative
-        if (!CbOfferwall.getInstance().isUnity()) {
+        if (!RapidoReach.getInstance().isUnity()) {
             toolbar.setContentInsetStartWithNavigation(0);
         }
 
@@ -230,7 +230,7 @@ public class RewardCenterActivity
 
         Drawable iconDrawable = appIcon;
         iconDrawable.mutate();
-        iconDrawable.setColorFilter(Color.parseColor(CbOfferwall.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
+        iconDrawable.setColorFilter(Color.parseColor(RapidoReach.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
 
 //        Drawable appIcon = getPackageManager().getApplicationIcon(getApplicationInfo());
 //
@@ -241,21 +241,21 @@ public class RewardCenterActivity
 //            appIcon = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 160, 160, true));
 //        }
 
-        if (CbOfferwall.getInstance().getOverrideCloseButtonURL() != null && CbOfferwall.getInstance().getOverrideCloseButton() != null) {
+        if (RapidoReach.getInstance().getOverrideCloseButtonURL() != null && RapidoReach.getInstance().getOverrideCloseButton() != null) {
 
-            Drawable drawable = CbOfferwall.getInstance().getOverrideCloseButton();
+            Drawable drawable = RapidoReach.getInstance().getOverrideCloseButton();
 
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Drawable newDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 80, 80, true));
 
             newDrawable.mutate();
-            newDrawable.setColorFilter(Color.parseColor(CbOfferwall.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
+            newDrawable.setColorFilter(Color.parseColor(RapidoReach.getInstance().getNavigationBarTextColor()), PorterDuff.Mode.SRC_ATOP);
 
-            if (!CbOfferwall.getInstance().momentSurveyOpen) {
+            if (!RapidoReach.getInstance().momentSurveyOpen) {
                 getSupportActionBar().setHomeAsUpIndicator(newDrawable);
             }
         } else {
-            if (!CbOfferwall.getInstance().momentSurveyOpen) {
+            if (!RapidoReach.getInstance().momentSurveyOpen) {
                 getSupportActionBar().setHomeAsUpIndicator(appIcon);
             }
         }
@@ -265,9 +265,9 @@ public class RewardCenterActivity
         title.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT));
-        title.setTextColor(Color.parseColor(CbOfferwall.getInstance().getNavigationBarTextColor()));
+        title.setTextColor(Color.parseColor(RapidoReach.getInstance().getNavigationBarTextColor()));
 
-        title.setText(CbOfferwall.getInstance().getNavigationBarText());
+        title.setText(RapidoReach.getInstance().getNavigationBarText());
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         title.setMaxLines(1);
         title.setEllipsize(TextUtils.TruncateAt.END);
@@ -372,7 +372,7 @@ public class RewardCenterActivity
 
     protected void closeRewardCenter() {
         finish();
-        CbOfferwall.getInstance().onRewardCenterClosed();
+        RapidoReach.getInstance().onRewardCenterClosed();
     }
 
     public void onBackPressed() {
@@ -482,7 +482,7 @@ public class RewardCenterActivity
                 dialog.show();
             } catch (Exception e) {
                 e.printStackTrace();
-                view.loadUrl(CbOfferwall.getInstance().getSurveyUrl());
+                view.loadUrl(RapidoReach.getInstance().getSurveyUrl());
             }
         }
 
@@ -492,7 +492,7 @@ public class RewardCenterActivity
             RewardCenterActivity.this._progressIndicatorView.setVisibility(View.VISIBLE);
 
             if (url.contains("https://play.google.com/store/apps/") || (url.contains("market://"))) {
-                view.loadUrl(CbOfferwall.getInstance().getSurveyUrl());
+                view.loadUrl(RapidoReach.getInstance().getSurveyUrl());
             }
         }
 

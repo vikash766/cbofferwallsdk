@@ -27,13 +27,13 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.example.cbofferwallsdk.CbOfferwall.SDK_VERSION;
+import static com.example.cbofferwallsdk.RapidoReach.SDK_VERSION;
 
 /**
  * Created by thammond on 12/23/15.
  */
 public class AppuserConnection {
-    public static final String TAG = "CbOfferwall";
+    public static final String TAG = "RapidoReach";
 
     byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -81,7 +81,7 @@ public class AppuserConnection {
 
             String urlString = getUrlPrefix() + "appusers";
 
-            CbOfferwall tr = CbOfferwall.getInstance();
+            RapidoReach tr = RapidoReach.getInstance();
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.append(urlString + "?gps_id=").append(tr.getGpsId());
             urlBuilder.append("&api_key=").append(tr.getApiKey());
@@ -99,7 +99,7 @@ public class AppuserConnection {
                 urlBuilder.append("&language=" + cc);
             }
 
-            if (CbOfferwall.getInstance().resetProfiler) {
+            if (RapidoReach.getInstance().resetProfiler) {
                 urlBuilder.append("&reset_profiler=").append("true");
             }
 
@@ -124,13 +124,13 @@ public class AppuserConnection {
                 boolean isProfiled = object.getBoolean("profiled");
                 int momentsPollingFrequency = object.getInt("moments_polling_frequency");
 
-                CbOfferwall.getInstance().setAppuserId(appuserId);
-                CbOfferwall.getInstance().setSurveyAvailable(surveyAvailable);
-                CbOfferwall.getInstance().setMomentsSurveyPollingFrequency(momentsPollingFrequency);
+                RapidoReach.getInstance().setAppuserId(appuserId);
+                RapidoReach.getInstance().setSurveyAvailable(surveyAvailable);
+                RapidoReach.getInstance().setMomentsSurveyPollingFrequency(momentsPollingFrequency);
 
-                CbOfferwall.getInstance().setIsProfiled(isProfiled);
+                RapidoReach.getInstance().setIsProfiled(isProfiled);
 
-                Log.d(TAG, "appuserId: " +  CbOfferwall.getInstance().getAppuserId());
+                Log.d(TAG, "appuserId: " +  RapidoReach.getInstance().getAppuserId());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -148,15 +148,15 @@ public class AppuserConnection {
         try {
             String url;
 
-            String urlString = getUrlPrefix() + "appusers/" + CbOfferwall.getInstance().getAppuserId() + "/moments";
+            String urlString = getUrlPrefix() + "appusers/" + RapidoReach.getInstance().getAppuserId() + "/moments";
 
-            CbOfferwall tr = CbOfferwall.getInstance();
+            RapidoReach tr = RapidoReach.getInstance();
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.append(urlString + "?gps_id=").append(tr.getGpsId());
             urlBuilder.append("&api_key=").append(tr.getApiKey());
             urlBuilder.append("&user_id=").append(tr.getUserID());
 
-            if (CbOfferwall.getInstance().resetProfiler) {
+            if (RapidoReach.getInstance().resetProfiler) {
                 urlBuilder.append("&reset_profiler=").append("true");
             }
 
@@ -173,9 +173,9 @@ public class AppuserConnection {
                 int surveyLength = object.getInt("loi");
 
                 if (surveyEntryURL != null && surveyEntryURL.length() > 1 && surveyLength > 0 && surveyLength < 31) {
-                    CbOfferwall.getInstance().setMomentSurveyLength(surveyLength);
+                    RapidoReach.getInstance().setMomentSurveyLength(surveyLength);
 
-                    CbOfferwall.getInstance().setMomentEntryURL(surveyEntryURL);
+                    RapidoReach.getInstance().setMomentEntryURL(surveyEntryURL);
 
                 }
 
@@ -199,7 +199,7 @@ public class AppuserConnection {
             InputStream input = connection.getInputStream();
 
             x = BitmapFactory.decodeStream(input);
-            return new BitmapDrawable(CbOfferwall.getInstance().getParentContext().getResources(), x);
+            return new BitmapDrawable(RapidoReach.getInstance().getParentContext().getResources(), x);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -227,7 +227,7 @@ public class AppuserConnection {
         try {
             String url;
 
-            String rewardUrl = "https://cbofferwall-srv2.kondgekar.com/api/sdk/v2/appusers/" + CbOfferwall.getInstance().getAppuserId() + "/appuser_rewards?api_key=" + CbOfferwall.getInstance().getApiKey();
+            String rewardUrl = "https://cbofferwall-srv2.kondgekar.com/api/sdk/v2/appusers/" + RapidoReach.getInstance().getAppuserId() + "/appuser_rewards?api_key=" + RapidoReach.getInstance().getApiKey();
 
             String encryptedString = this.getMd5Hash(rewardUrl + "12fb172e94cfcb20dd65c315336b919f");
             String urlString = rewardUrl + "&enc=" + encryptedString;
@@ -242,9 +242,9 @@ public class AppuserConnection {
                 pending_coins = object.getInt("total_rewards");
                 String rewardIds = object.getString("appuser_reward_ids");
 
-                if (pending_coins > 0 && (CbOfferwall.getInstance().getRewardIds() != null && !CbOfferwall.getInstance().getRewardIds().equals(rewardIds))) {
-                    CbOfferwall.getInstance().setRewardIds(rewardIds);
-                    CbOfferwall.getInstance().awardContent(pending_coins);
+                if (pending_coins > 0 && (RapidoReach.getInstance().getRewardIds() != null && !RapidoReach.getInstance().getRewardIds().equals(rewardIds))) {
+                    RapidoReach.getInstance().setRewardIds(rewardIds);
+                    RapidoReach.getInstance().awardContent(pending_coins);
                 }
 
             } catch (JSONException e) {
@@ -263,7 +263,7 @@ public class AppuserConnection {
 
             String urlString = getUrlPrefix() + "appuser_rewards/confirmed";
 
-            String input = "{\"api_key\": \"" + CbOfferwall.getInstance().getApiKey() + "\",\"appuser_reward_ids\": " + "\"" + CbOfferwall.getInstance().getRewardIds() + "\"" + "}";
+            String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\",\"appuser_reward_ids\": " + "\"" + RapidoReach.getInstance().getRewardIds() + "\"" + "}";
 
             URL url = new URL(urlString);
             Log.d(TAG, "grantUserReward "+url.toString());
@@ -296,7 +296,7 @@ public class AppuserConnection {
 
     public void createSurveySession() {
         try {
-            String appuserId = CbOfferwall.getInstance().getAppuserId();
+            String appuserId = RapidoReach.getInstance().getAppuserId();
 
             String urlString = getUrlPrefix() + "appusers/" + appuserId + "/start_new_appuser_session";
 
@@ -309,7 +309,7 @@ public class AppuserConnection {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
 
-            String input = "{\"api_key\": \"" + CbOfferwall.getInstance().getApiKey() + "\"" + "}";
+            String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\"" + "}";
 
             Log.d(TAG, "post body "+input);
 

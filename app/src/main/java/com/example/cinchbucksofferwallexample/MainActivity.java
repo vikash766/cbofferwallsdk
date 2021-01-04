@@ -7,14 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.cbofferwallsdk.CbOfferwall;
-import com.example.cbofferwallsdk.CbOfferwallRewardListener;
-import com.example.cbofferwallsdk.CbOfferwallSurveyAvailableListener;
-import com.example.cbofferwallsdk.CbOfferwallSurveyListener;
+import com.example.cbofferwallsdk.RapidoReach;
+import com.example.cbofferwallsdk.RapidoReachRewardListener;
+import com.example.cbofferwallsdk.RapidoReachSurveyAvailableListener;
+import com.example.cbofferwallsdk.RapidoReachSurveyListener;
 
-public class MainActivity extends AppCompatActivity implements CbOfferwallRewardListener, CbOfferwallSurveyListener, CbOfferwallSurveyAvailableListener  {
+public class MainActivity extends AppCompatActivity implements RapidoReachRewardListener, RapidoReachSurveyListener, RapidoReachSurveyAvailableListener  {
 
-    private final String TAG = "CbOfferwall";
+    private final String TAG = "RapidoReach";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,28 +22,28 @@ public class MainActivity extends AppCompatActivity implements CbOfferwallReward
         setContentView(R.layout.activity_main);
 
 
-        //initialize CbOfferwall
-        CbOfferwall.initWithApiKeyAndUserIdAndActivityContext("40cdb7704cacbaeb4c4e491f4ece", "ANDROID_TEST_ID", this);
+        //initialize RapidoReach
+        RapidoReach.initWithApiKeyAndUserIdAndActivityContext("d5ece53df8ac97409298325fec81f3f7", "ANDROID_TEST_ID", this);
 
         //customize navigation header
-        CbOfferwall.getInstance().setNavigationBarText("Demo App");
-        CbOfferwall.getInstance().setNavigationBarColor("#211548");
-        CbOfferwall.getInstance().setNavigationBarTextColor("#FFFFFF");
+        RapidoReach.getInstance().setNavigationBarText("Demo App");
+        RapidoReach.getInstance().setNavigationBarColor("#211548");
+        RapidoReach.getInstance().setNavigationBarTextColor("#FFFFFF");
 
         //set reward and survey status listeners
-        CbOfferwall.getInstance().setCbOfferwallRewardListener(this);
-        CbOfferwall.getInstance().setCbOfferwallSurveyListener(this);
-        CbOfferwall.getInstance().setCbOfferwallSurveyAvailableListener(this);
+        RapidoReach.getInstance().setRapidoReachRewardListener(this);
+        RapidoReach.getInstance().setRapidoReachSurveyListener(this);
+        RapidoReach.getInstance().setRapidoReachSurveyAvailableListener(this);
 
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Button is clicked");
-                if (CbOfferwall.getInstance().isSurveyAvailable()) {
+                if (RapidoReach.getInstance().isSurveyAvailable()) {
                     // for second placement to earn Gems as well as Tokens
-//                    CbOfferwall.getInstance().showRewardCenter("66cb0225-3af3-4d63-8920-7a7a9e43abb2");
-                    CbOfferwall.getInstance().showRewardCenter();
+//                    RapidoReach.getInstance().showRewardCenter("66cb0225-3af3-4d63-8920-7a7a9e43abb2");
+                    RapidoReach.getInstance().showRewardCenter();
                 }
 
             }
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements CbOfferwallReward
     @Override
     protected void onResume() {
         super.onResume();
-        CbOfferwall.getInstance().onResume(this);
+        RapidoReach.getInstance().onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        CbOfferwall.getInstance().onPause();
+        RapidoReach.getInstance().onPause();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements CbOfferwallReward
 
     @Override
     public void cbofferwallSurveyAvailable(boolean surveyAvailable) {
-        Log.d(TAG, "CbOfferwall Survey Available: " + surveyAvailable);
+        Log.d(TAG, "RapidoReach Survey Available: " + surveyAvailable);
 
     }
 }
