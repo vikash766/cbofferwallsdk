@@ -21,6 +21,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -371,6 +372,7 @@ public class RewardCenterActivity
     }
 
     protected void closeRewardCenter() {
+        //Log.d("RapidoReach", "closeRewardCenter");
         finish();
         RapidoReach.getInstance().onRewardCenterClosed();
     }

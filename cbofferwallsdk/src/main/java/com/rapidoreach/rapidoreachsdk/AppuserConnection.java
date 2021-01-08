@@ -38,15 +38,15 @@ public class AppuserConnection {
     byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        Log.d(TAG, "creating connection "+connection.toString());
+        //Log.d(TAG, "creating connection "+connection.toString());
         try {
-            Log.d(TAG, "within try block of getUrlBytes");
+            //Log.d(TAG, "within try block of getUrlBytes");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Log.d(TAG, "out "+out.toString());
+            //Log.d(TAG, "out "+out.toString());
             InputStream in = connection.getInputStream();
-            Log.d(TAG, "in "+in.toString());
+            //Log.d(TAG, "in "+in.toString());
 
-            Log.d(TAG, "http response code "+connection.getResponseCode());
+            //Log.d(TAG, "http response code "+connection.getResponseCode());
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 return null;
             }
@@ -57,10 +57,10 @@ public class AppuserConnection {
                 out.write(buffer, 0, bytesRead);
             }
             out.close();
-            Log.d(TAG, out.toString());
+            //Log.d(TAG, out.toString());
             return out.toByteArray();
         } finally {
-            Log.d(TAG, "Connection disconnected");
+            //Log.d(TAG, "Connection disconnected");
             connection.disconnect();
         }
     }
@@ -74,7 +74,7 @@ public class AppuserConnection {
     }
 
     public String getAppuserId() throws JSONException {
-        Log.d(TAG, "Within getAppuserId");
+        //Log.d(TAG, "Within getAppuserId");
         String jsonString = "";
         try {
             String url;
@@ -104,18 +104,18 @@ public class AppuserConnection {
             }
 
             url = urlBuilder.toString();
-            Log.d(TAG, "url "+url);
+            //Log.d(TAG, "url "+url);
             URL urlOutput = new URL(url);
             URI uri = null;
             try {
                 uri = new URI(urlOutput.getProtocol(), urlOutput.getUserInfo(), urlOutput.getHost(), urlOutput.getPort(), urlOutput.getPath(), urlOutput.getQuery(), urlOutput.getRef());
             } catch (Exception e) {
-                Log.d(TAG, "Exceptipn "+e.toString());
+                //Log.d(TAG, "Exceptipn "+e.toString());
             }
             urlOutput = uri.toURL();
-            Log.d(TAG, "urlOutput "+urlOutput.toString());
+            //Log.d(TAG, "urlOutput "+urlOutput.toString());
             jsonString = getUrl(urlOutput.toString());
-            Log.d(TAG,"getAppuserId " + jsonString.toString());
+            //Log.d(TAG,"getAppuserId " + jsonString.toString());
             try {
                 JSONObject object = new JSONObject(jsonString);
 
@@ -130,7 +130,7 @@ public class AppuserConnection {
 
                 RapidoReach.getInstance().setIsProfiled(isProfiled);
 
-                Log.d(TAG, "appuserId: " +  RapidoReach.getInstance().getAppuserId());
+                //Log.d(TAG, "appuserId: " +  RapidoReach.getInstance().getAppuserId());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -164,7 +164,7 @@ public class AppuserConnection {
 
             jsonString = getUrl(url);
 
-            Log.d(TAG, "getMomentSurveyEntryURL: " + jsonString);
+            //Log.d(TAG, "getMomentSurveyEntryURL: " + jsonString);
 
             try {
                 JSONObject object = new JSONObject(jsonString);
@@ -181,11 +181,11 @@ public class AppuserConnection {
 
 
             } catch (JSONException e) {
-                Log.d(TAG, e.toString());
+                //Log.d(TAG, e.toString());
             }
 
         } catch (IOException ioe) {
-            Log.d(TAG, ioe.toString());
+            //Log.d(TAG, ioe.toString());
         }
 
         return jsonString;
@@ -248,11 +248,11 @@ public class AppuserConnection {
                 }
 
             } catch (JSONException e) {
-                Log.d(TAG, e.toString());
+                //Log.d(TAG, e.toString());
             }
 
         } catch (IOException ioe) {
-            Log.d(TAG, ioe.toString());
+            //Log.d(TAG, ioe.toString());
         }
 
         return jsonString;
@@ -266,7 +266,7 @@ public class AppuserConnection {
             String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\",\"appuser_reward_ids\": " + "\"" + RapidoReach.getInstance().getRewardIds() + "\"" + "}";
 
             URL url = new URL(urlString);
-            Log.d(TAG, "grantUserReward "+url.toString());
+            //Log.d(TAG, "grantUserReward "+url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
@@ -300,7 +300,7 @@ public class AppuserConnection {
 
             String urlString = getUrlPrefix() + "appusers/" + appuserId + "/start_new_appuser_session";
 
-            Log.d(TAG, "createSurveySession "+urlString);
+            //Log.d(TAG, "createSurveySession "+urlString);
 
             URL url = new URL(urlString);
 
@@ -311,7 +311,7 @@ public class AppuserConnection {
 
             String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\"" + "}";
 
-            Log.d(TAG, "post body "+input);
+            //Log.d(TAG, "post body "+input);
 
             OutputStream os = conn.getOutputStream();
             os.write(input.getBytes());
