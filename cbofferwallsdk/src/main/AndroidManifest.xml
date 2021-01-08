@@ -2,10 +2,12 @@
     package="com.rapidoreach.rapidoreachsdk">
 
     <application>
-        <activity android:name=".RewardCenterActivity">
-            
+        <activity
+            android:name=".RewardCenterActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|orientation"
+            android:label="TheoremReach"
+            android:theme="@style/LibraryTheme">
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

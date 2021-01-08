@@ -81,6 +81,7 @@ public class RapidoReach {
     private TRTimer refreshAvailableSurveyTask;
 
     private final String TAG = "RapidoReach";
+    private static String TAG_STATIC = "RapidoReach";
 
     public static RapidoReach getInstance()
     {
@@ -91,7 +92,12 @@ public class RapidoReach {
         return _instance;
     }
 
+    public String getAppUserId(){
+        return getInstance()._appuserId;
+    }
+
     public static RapidoReach initWithApiKeyAndUserIdAndActivityContext(String apiKey, String userId, Activity parentActivity)  {
+        Log.d(TAG_STATIC, "within initWithApiKeyAndUserIdAndActivityContext ");
         getInstance().setup(apiKey, userId, parentActivity);
         getInstance().setNavigationBarText("RapidoReach");
 
@@ -101,15 +107,19 @@ public class RapidoReach {
     // TODO: is the ThreadPolicy global? Enforce this in a demo app.
 
     public void setup(String apiKey, String userId, Activity parentActivity) {
-
+        Log.d(TAG, "Within setup userId "+userId+", apiKey "+apiKey);
         getInstance().setParentActivityContext(parentActivity);
         getInstance().setUserId(userId);
         getInstance().setApiKey(apiKey);
         getInstance().setCarrier(parentActivity);
         getInstance().setConnectionType(parentActivity);
+        Log.d(TAG, "Final connection type "+this._connectionType);
         getInstance().setAppDevice();
+        Log.d(TAG, "App device "+this._appDevice);
         getInstance().setOsVersion();
+        Log.d(TAG, "OS version "+this._osVersion);
         getInstance().setGoogleAdvertiserId();
+        Log.d(TAG, "Connectivity manager is not available connection type "+this._connectionType);
     }
 
     public void showMomentSurvey(){
@@ -226,24 +236,31 @@ public class RapidoReach {
     // TODO: create new class for all of the static AsyncTasks called like "BackgroundWork"
 
     void setGoogleAdvertiserId() {
+        Log.d(TAG, "Within setGoogleAdvertiserId");
+        Log.d(TAG, "fetchingAppuserId "+fetchingAppuserId);
         if (fetchingAppuserId) return;
 
         fetchingAppuserId = true;
 
         if (isKindleFire()) {
+            Log.d(TAG, "isKindleFire "+isKindleFire());
             String advertisingID = "";
             boolean limitAdTracking = false;
 
             try {
                 ContentResolver cr = RapidoReach.getInstance().getParentContext().getContentResolver();
+                Log.d(TAG, "ContentResolver cr "+cr.toString());
 
                 // get user's tracking preference
                 limitAdTracking = (Secure.getInt(cr, "limit_ad_tracking") == 0) ? false : true;
+                Log.d(TAG, "limitAdTracking "+limitAdTracking);
 
                 if (limitAdTracking) return;
 
                 // get advertising
                 advertisingID = Secure.getString(cr, "advertising_id");
+                Log.d(TAG, "advertisingID "+advertisingID);
+                Log.d(TAG, "starting startGetAppuserTask ");
                 RapidoReach.getInstance().startGetAppuserTask();
             } catch (SettingNotFoundException ex) {
                 // not supported
@@ -258,6 +275,7 @@ public class RapidoReach {
 
     public void showUnityRewardCenter(final Activity context)
     {
+        Log.d(TAG, "Within show showUnityRewardCenter");
         if (!checkConnectionStatus()) return;
 
         getInstance()._parentContext = new WeakReference<Activity>(context);
@@ -414,8 +432,10 @@ public class RapidoReach {
         protected Void doInBackground(Void... params) {
             try {
 
+                Log.d(TAG_STATIC, "Getting app user id");
                 new AppuserConnection().getAppuserId();
 
+                Log.d(TAG_STATIC, "completed Getting app user id");
                 RapidoReach.getInstance().fetchingAppuserId = false;
 
             } catch (Exception e) {
@@ -426,6 +446,7 @@ public class RapidoReach {
 
         @Override
         protected void onPostExecute(Void result) {
+            Log.d(TAG_STATIC, "within GetAppuserId of GetAppuserId");
             if (RapidoReach.getInstance()._appuserId != null && RapidoReach.getInstance()._appuserId.length() > 1) {
                 if (RapidoReach.getInstance()._parentContext != null && RapidoReach.getInstance()._parentContext.get() != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RapidoReach.getInstance().getParentContext());
@@ -763,11 +784,13 @@ public class RapidoReach {
     }
 
     public void setConnectionType(Activity context) {
+        Log.d(TAG, "within setConnectionType");
         this._connectionType = "connectionType";
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             @SuppressWarnings("deprecation") NetworkInfo info = cm.getActiveNetworkInfo();
             //noinspection deprecation
+            Log.d(TAG, "Connectivity Manager is available");
             if (info == null || !info.isConnected()) {
                 this._connectionType = "unknown"; //not connected
                 return;
@@ -830,10 +853,12 @@ public class RapidoReach {
                 }
             } else {
                 this._connectionType = "unknown";
+                Log.d(TAG, "Connectivity manager is available connection type "+this._connectionType);
                 return;
             }
         } catch (Exception e) {
             this._connectionType = "unknown";
+            Log.d(TAG, "Connectivity manager is not available connection type "+this._connectionType);
             return;
         }
     }
@@ -843,8 +868,10 @@ public class RapidoReach {
     }
 
     public void setCarrier(Activity context) {
+        Log.d(TAG, "setCarrier Activity context");
         try {
             TelephonyManager telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
+            Log.d(TAG, "Telephony manager is available TelephonyManager telephonyManager carrier detected as "+telephonyManager.getSimOperatorName());
             if (telephonyManager.getSimOperatorName() != null) {
                 this._carrier = telephonyManager.getSimOperatorName();
             } else {
@@ -853,6 +880,7 @@ public class RapidoReach {
         } catch (Exception e) {
             this._carrier = "";
         }
+        Log.d(TAG, "Carrier is set to "+this._carrier);
     }
 
     public void setOsVersion() {
@@ -980,16 +1008,19 @@ public class RapidoReach {
 
     public void setApiKey(String key)
     {
+        Log.d(TAG, "setApiKey key "+key);
         this._apiKey = key;
     }
 
     public void setParentActivityContext(Activity key)
     {
+        Log.d(TAG, "within setParentActivityContext Activity key "+key);
         this._parentContext = new WeakReference<Activity>(key);
     }
 
     public void setUserId(String key)
     {
+        Log.d(TAG, "setUserId key "+key);
         this._userId = key;
     }
 
