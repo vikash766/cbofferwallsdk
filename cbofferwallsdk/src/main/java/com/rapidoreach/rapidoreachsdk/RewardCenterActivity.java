@@ -95,7 +95,7 @@ public class RewardCenterActivity
 
     private void updateSharedPreferences(boolean status) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("theoremReachActive", status).commit();
+        prefs.edit().putBoolean("rapidoReachActive", status).commit();
     }
 
     @Override

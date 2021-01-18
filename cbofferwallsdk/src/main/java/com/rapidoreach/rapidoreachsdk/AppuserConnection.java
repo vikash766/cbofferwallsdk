@@ -5,8 +5,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Message;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -115,19 +117,23 @@ public class AppuserConnection {
             urlOutput = uri.toURL();
             //Log.d(TAG, "urlOutput "+urlOutput.toString());
             jsonString = getUrl(urlOutput.toString());
-            //Log.d(TAG,"getAppuserId " + jsonString.toString());
+            Log.d(TAG,"getAppuserId " + jsonString.toString());
             try {
                 JSONObject object = new JSONObject(jsonString);
-
-                String appuserId = object.getString("id");
-                boolean surveyAvailable = object.getBoolean("survey_available");
-                boolean isProfiled = object.getBoolean("profiled");
-                int momentsPollingFrequency = object.getInt("moments_polling_frequency");
-
+                String ErrorCode = object.getString("ErrorCode");
+                Log.d(TAG, ErrorCode);
+                JSONArray Data = object.getJSONArray("Data");
+                if(!ErrorCode.equals("SUCCESS")){
+                    ErrorHandler.handle(object);
+                    return jsonString;
+                }
+                String appuserId = object.getJSONArray("Data").getJSONObject(0).getString("id");
+                boolean surveyAvailable = object.getJSONArray("Data").getJSONObject(0).getBoolean("survey_available");
+                boolean isProfiled = object.getJSONArray("Data").getJSONObject(0).getBoolean("profiled");
+                int momentsPollingFrequency = object.getJSONArray("Data").getJSONObject(0).getInt("moments_polling_frequency");
                 RapidoReach.getInstance().setAppuserId(appuserId);
                 RapidoReach.getInstance().setSurveyAvailable(surveyAvailable);
                 RapidoReach.getInstance().setMomentsSurveyPollingFrequency(momentsPollingFrequency);
-
                 RapidoReach.getInstance().setIsProfiled(isProfiled);
 
                 //Log.d(TAG, "appuserId: " +  RapidoReach.getInstance().getAppuserId());
@@ -223,6 +229,7 @@ public class AppuserConnection {
     }
 
     public String checkAppuserRewards() throws JSONException {
+        Log.d(TAG, "Within checkAppuserRewards");
         String jsonString = "";
         try {
             String url;
@@ -231,16 +238,20 @@ public class AppuserConnection {
 
             String encryptedString = this.getMd5Hash(rewardUrl + "12fb172e94cfcb20dd65c315336b919f");
             String urlString = rewardUrl + "&enc=" + encryptedString;
-
+            Log.d(TAG, "Reward url "+urlString);
             url = Uri.parse(urlString).buildUpon().build().toString();
 
             jsonString = getUrl(url);
-
+            Log.d(TAG, jsonString);
             try {
                 JSONObject object = new JSONObject(jsonString);
+                if(!object.getString("ErrorCode").equals("SUCCESS")){
+                    ErrorHandler.handle(object);
+                    return jsonString;
+                }
                 int pending_coins = 0;
-                pending_coins = object.getInt("total_rewards");
-                String rewardIds = object.getString("appuser_reward_ids");
+                pending_coins = object.getJSONArray("Data").getJSONObject(0).getInt("total_rewards");
+                String rewardIds = object.getJSONArray("Data").getJSONObject(0).getString("appuser_reward_ids");
 
                 if (pending_coins > 0 && (RapidoReach.getInstance().getRewardIds() != null && !RapidoReach.getInstance().getRewardIds().equals(rewardIds))) {
                     RapidoReach.getInstance().setRewardIds(rewardIds);

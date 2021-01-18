@@ -14,6 +14,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
@@ -25,6 +28,8 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.InvalidParameterException;
@@ -34,7 +39,7 @@ import java.util.TimerTask;
 public class RapidoReach {
     private static RapidoReach _instance;
     public static String APIProtocol = "https://";
-    public static String APIUrl = "cbofferwall-srv2.kondgekar.com";
+    public static String APIUrl = "cbofferwall2-srv2.kondgekar.com";
     public static String getFullAPIUrl(){
         return APIProtocol+APIUrl;
     }
@@ -73,6 +78,7 @@ public class RapidoReach {
     private int momentsPollingFrequency = -1;
     private boolean unity = false;
     private String placementId = "";
+    public Context context;
 
     private boolean momentsEnabled = false;
     private boolean momentsTitleBarEnabled = false;
@@ -87,6 +93,8 @@ public class RapidoReach {
 
     private final String TAG = "RapidoReach";
     private static String TAG_STATIC = "RapidoReach";
+
+    public Handler mHandler;
 
     public static RapidoReach getInstance()
     {
@@ -104,6 +112,7 @@ public class RapidoReach {
     public static RapidoReach initWithApiKeyAndUserIdAndActivityContext(String apiKey, String userId, Activity parentActivity)  {
         //Log.d(TAG_STATIC, "within initWithApiKeyAndUserIdAndActivityContext ");
         getInstance().setup(apiKey, userId, parentActivity);
+        getInstance().context = parentActivity;
         getInstance().setNavigationBarText("RapidoReach");
 
         return getInstance();
@@ -113,6 +122,18 @@ public class RapidoReach {
 
     public void setup(String apiKey, String userId, Activity parentActivity) {
         //Log.d(TAG, "Within setup userId "+userId+", apiKey "+apiKey);
+        getInstance().mHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                handleError((JSONObject) msg.obj);
+            }
+
+            public void handleError(JSONObject object){
+              ReplyObject ro = new ReplyObject(object);
+              ErrorHandler.handleError(ro);
+          }
+        };
         getInstance().setParentActivityContext(parentActivity);
         getInstance().setUserId(userId);
         getInstance().setApiKey(apiKey);
@@ -169,7 +190,14 @@ public class RapidoReach {
     }
 
     public void showRewardCenter()
-    {
+    {   Log.d(TAG, RapidoReach.getInstance()._appuserId);
+        if(RapidoReach.getInstance()._appuserId.equals("")){
+            ReplyObject ro = new ReplyObject();
+            ro.ErrorCode = "ERROR";
+            ro.Errors.put("appUserId is not set hence couldnt open reward center");
+            ErrorHandler.handle(ro.toJSONObject());
+            return;
+        }
         if (!confirmConnectivity()) return;
 
         rewardCenterOpen = true;
@@ -366,7 +394,7 @@ public class RapidoReach {
     private void generateRewardCenterURL() {
         RapidoReach tr = RapidoReach.getInstance();
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(getUrlPrefix() + "sdk/v2/appuser_entry?gps_id=").append(tr.getGpsId());
+        urlBuilder.append(getUrlPrefix() + "/sdk/v2/appuser_entry?gps_id=").append(tr.getGpsId());
         urlBuilder.append("&api_key=").append(tr.getApiKey());
         urlBuilder.append("&user_id=").append(tr.getUserID());
 
@@ -418,7 +446,7 @@ public class RapidoReach {
                     if (RapidoReach.getInstance()._parentContext != null && RapidoReach.getInstance()._parentContext.get() != null) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RapidoReach.getInstance().getParentContext());
 
-                        if (!(prefs.getBoolean("theoremReachActive", false))) {
+                        if (!(prefs.getBoolean("rapidoReachActive", false))) {
                             unityAwardNotification();
                         }
                     }
@@ -457,7 +485,7 @@ public class RapidoReach {
                 if (RapidoReach.getInstance()._parentContext != null && RapidoReach.getInstance()._parentContext.get() != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RapidoReach.getInstance().getParentContext());
                     //Log.d("RapidoReach", "putString theoremReachAppuserId");
-                    prefs.edit().putString("theoremReachAppuserId", RapidoReach.getInstance()._appuserId).apply();
+                    prefs.edit().putString("rapidoReachAppuserId", RapidoReach.getInstance()._appuserId).apply();
                 }
 
                 if (!RapidoReach.getInstance().initialized) {
@@ -910,7 +938,7 @@ public class RapidoReach {
             if (RapidoReach.getInstance()._parentContext != null && RapidoReach.getInstance()._parentContext.get() != null) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RapidoReach.getInstance().getParentContext());
                 //Log.d(TAG, "App user Id is null ");
-                return prefs.getString("theoremReachAppuserId", null);
+                return prefs.getString("rapidoReachAppuserId", null);
             }
         }
         //Log.d(TAG, "appUserId is "+this._appuserId);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TheoremReach</string>
+    <string name="app_name">RapidoReach</string>
     <style name="LibraryTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:minWidth">0dip</item>
         <item name="android:maxWidth">50dip</item>
