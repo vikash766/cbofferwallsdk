@@ -33,6 +33,11 @@ import java.util.TimerTask;
 
 public class RapidoReach {
     private static RapidoReach _instance;
+    public static String APIProtocol = "https://";
+    public static String APIUrl = "cbofferwall-srv2.kondgekar.com";
+    public static String getFullAPIUrl(){
+        return APIProtocol+APIUrl;
+    }
     private RapidoReachRewardListener _rewardListener;
     private RapidoReachSurveyListener _surveyListener;
     private RapidoReachSurveyAvailableListener _surveyAvailableListener;
@@ -1053,7 +1058,7 @@ public class RapidoReach {
     }
 
     private String getUrlPrefix() {
-        return  "https://cbofferwall-srv2.kondgekar.com/";
+        return  RapidoReach.getFullAPIUrl();
     }
 
     public void setUnityObjectName(String objectName) {

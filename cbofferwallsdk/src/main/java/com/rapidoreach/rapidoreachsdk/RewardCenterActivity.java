@@ -67,7 +67,7 @@ public class RewardCenterActivity
         RelativeLayout survey_layout = generateSurveyLayout();
 
         this._baseUrl = RapidoReach.getInstance().getSurveyUrl();
-        this._homeButtonURL = "https://cbofferwall-srv2.kondgekar.com/api/sdk/v1/appuser_abandoned_campaign?id=" + RapidoReach.getInstance().getAppuserId();
+        this._homeButtonURL = RapidoReach.getFullAPIUrl()+ "/api/sdk/v1/appuser_abandoned_campaign?id=" + RapidoReach.getInstance().getAppuserId();
         setOrientationPermission();
         initUI();
 
@@ -141,7 +141,7 @@ public class RewardCenterActivity
                 }
 
                 if (url != null) {
-                    if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
+                    if ((url.getHost().equals(RapidoReach.APIUrl)) || (url.getHost().equals("staging."+RapidoReach.APIUrl))) {
                         closeRewardCenter();
                         return true;
                     } else {
@@ -390,7 +390,7 @@ public class RewardCenterActivity
 
         if (url != null) {
             String path = url.getPath();
-            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
+            if ((url.getHost().equals(RapidoReach.APIUrl)) || (url.getHost().equals("staging."+RapidoReach.APIUrl))) {
                 closeRewardCenter();
                 return;
             }
@@ -412,7 +412,7 @@ public class RewardCenterActivity
         if (url != null) {
             String path = url.getPath();
 
-            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
+            if ((url.getHost().equals(RapidoReach.APIUrl)) || (url.getHost().equals("staging."+RapidoReach.APIUrl))) {
                 if (path.contains("pulley/finish")) {
                     closeRewardCenter();
                     return;

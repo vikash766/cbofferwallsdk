@@ -39,8 +39,7 @@ public class MomentSurveyActivity extends RewardCenterActivity {
 
         if (url != null) {
             String path = url.getPath();
-
-            if ((url.getHost().equals("cbofferwall-srv2.kondgekar.com")) || (url.getHost().equals("staging.cbofferwall-srv2.kondgekar.com"))) {
+            if ((url.getHost().equals(RapidoReach.APIUrl)) || (url.getHost().equals("staging."+RapidoReach.APIUrl))) {
                 if (path.contains("moments_result/success")) {
                     if (!finished) {
                         RapidoReach.getInstance().onMomentSurveyCompleted();
