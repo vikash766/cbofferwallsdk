@@ -51,7 +51,7 @@ public class ErrorHandler {
         if(creply.ErrorCode.equals("SUCCESS")){
             return;
         }
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RapidoReach.getInstance().context);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RapidoReach.getInstance().getParentContext());
         // set title
         alertDialogBuilder.setTitle(creply.ErrorCode);
         String error = "";

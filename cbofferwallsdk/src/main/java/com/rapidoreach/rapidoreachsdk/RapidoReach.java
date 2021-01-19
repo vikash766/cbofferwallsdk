@@ -78,7 +78,6 @@ public class RapidoReach {
     private int momentsPollingFrequency = -1;
     private boolean unity = false;
     private String placementId = "";
-    public Context context;
 
     private boolean momentsEnabled = false;
     private boolean momentsTitleBarEnabled = false;
@@ -112,7 +111,6 @@ public class RapidoReach {
     public static RapidoReach initWithApiKeyAndUserIdAndActivityContext(String apiKey, String userId, Activity parentActivity)  {
         //Log.d(TAG_STATIC, "within initWithApiKeyAndUserIdAndActivityContext ");
         getInstance().setup(apiKey, userId, parentActivity);
-        getInstance().context = parentActivity;
         getInstance().setNavigationBarText("RapidoReach");
 
         return getInstance();
