@@ -39,7 +39,7 @@ import java.util.TimerTask;
 public class RapidoReach {
     private static RapidoReach _instance;
     public static String APIProtocol = "https://";
-    public static String APIUrl = "cbofferwall2-srv2.kondgekar.com";
+    public static String APIUrl = "cbofferwall-srv2.kondgekar.com";
     public static String getFullAPIUrl(){
         return APIProtocol+APIUrl;
     }
