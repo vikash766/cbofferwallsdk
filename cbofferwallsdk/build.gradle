@@ -16,6 +16,14 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
+            buildConfigField "String","VERSION_NAME","\"${defaultConfig.versionName}\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "long", "VERSION_CODE", "${defaultConfig.versionCode}"
+            buildConfigField "String","VERSION_NAME","\"${defaultConfig.versionName}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -28,5 +36,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api 'com.google.android.gms:play-services:8.1.0'
+    api 'com.google.android.gms:play-services:12.0.1'
 }
