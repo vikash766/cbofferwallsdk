@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rapidoreach.rapidoreachsdk">
+
+    <application>
+        <activity
+            android:name=".RewardCenterActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|orientation"
+            android:label="RapidoReach"
+            android:theme="@style/LibraryTheme">
+        </activity>
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>

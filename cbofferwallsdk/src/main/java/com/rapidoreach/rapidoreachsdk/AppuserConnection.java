@@ -1,0 +1,348 @@
+package com.rapidoreach.rapidoreachsdk;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Message;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import static com.rapidoreach.rapidoreachsdk.RapidoReach.SDK_VERSION;
+
+/**
+ * Created by thammond on 12/23/15.
+ */
+public class AppuserConnection {
+    public static final String TAG = "RapidoReach";
+
+    byte[] getUrlBytes(String urlSpec) throws IOException {
+        URL url = new URL(urlSpec);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        //Log.d(TAG, "creating connection "+connection.toString());
+        try {
+            //Log.d(TAG, "within try block of getUrlBytes");
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            //Log.d(TAG, "out "+out.toString());
+            InputStream in = connection.getInputStream();
+            //Log.d(TAG, "in "+in.toString());
+
+            //Log.d(TAG, "http response code "+connection.getResponseCode());
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            int bytesRead = 0;
+            byte[] buffer = new byte[1024];
+            while ((bytesRead = in.read(buffer)) > 0) {
+                out.write(buffer, 0, bytesRead);
+            }
+            out.close();
+            //Log.d(TAG, out.toString());
+            return out.toByteArray();
+        } finally {
+            //Log.d(TAG, "Connection disconnected");
+            connection.disconnect();
+        }
+    }
+
+    public String getUrl(String urlSpec) throws IOException {
+        return new String(getUrlBytes(urlSpec));
+    }
+
+    private String getUrlPrefix() {
+        return RapidoReach.getFullAPIUrl() + "/api/sdk/v1/";
+    }
+
+    public String getAppuserId() throws JSONException {
+        //Log.d(TAG, "Within getAppuserId");
+        String jsonString = "";
+        try {
+            String url;
+
+            String urlString = getUrlPrefix() + "appusers";
+
+            RapidoReach tr = RapidoReach.getInstance();
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append(urlString + "?gps_id=").append(tr.getGpsId());
+            urlBuilder.append("&api_key=").append(tr.getApiKey());
+            urlBuilder.append("&user_id=").append(tr.getUserID());
+            urlBuilder.append("&carrier=").append(tr.getCarrier());
+            urlBuilder.append("&os_version=").append(tr.getOsVersion());
+            urlBuilder.append("&app_device=").append(tr.getAppDevice());
+            urlBuilder.append("&connection_type=").append(tr.getConnectionType());
+            urlBuilder.append("&platform=").append("android");
+            urlBuilder.append("&sdk_version=").append(SDK_VERSION);
+
+            String cc = Locale.getDefault().getLanguage();
+
+            if (!cc.equals("")) {
+                urlBuilder.append("&language=" + cc);
+            }
+
+            if (RapidoReach.getInstance().resetProfiler) {
+                urlBuilder.append("&reset_profiler=").append("true");
+            }
+
+            url = urlBuilder.toString();
+            //Log.d(TAG, "url "+url);
+            URL urlOutput = new URL(url);
+            URI uri = null;
+            try {
+                uri = new URI(urlOutput.getProtocol(), urlOutput.getUserInfo(), urlOutput.getHost(), urlOutput.getPort(), urlOutput.getPath(), urlOutput.getQuery(), urlOutput.getRef());
+            } catch (Exception e) {
+                //Log.d(TAG, "Exceptipn "+e.toString());
+            }
+            urlOutput = uri.toURL();
+            //Log.d(TAG, "urlOutput "+urlOutput.toString());
+            jsonString = getUrl(urlOutput.toString());
+            Log.d(TAG,"getAppuserId " + jsonString.toString());
+            try {
+                JSONObject object = new JSONObject(jsonString);
+                String ErrorCode = object.getString("ErrorCode");
+                Log.d(TAG, ErrorCode);
+                JSONArray Data = object.getJSONArray("Data");
+                if(!ErrorCode.equals("SUCCESS")){
+                    ErrorHandler.handle(object);
+                    return jsonString;
+                }
+                String appuserId = object.getJSONArray("Data").getJSONObject(0).getString("id");
+                boolean surveyAvailable = object.getJSONArray("Data").getJSONObject(0).getBoolean("survey_available");
+                boolean isProfiled = object.getJSONArray("Data").getJSONObject(0).getBoolean("profiled");
+                int momentsPollingFrequency = object.getJSONArray("Data").getJSONObject(0).getInt("moments_polling_frequency");
+                RapidoReach.getInstance().setAppuserId(appuserId);
+                RapidoReach.getInstance().setSurveyAvailable(surveyAvailable);
+                RapidoReach.getInstance().setMomentsSurveyPollingFrequency(momentsPollingFrequency);
+                RapidoReach.getInstance().setIsProfiled(isProfiled);
+
+                //Log.d(TAG, "appuserId: " +  RapidoReach.getInstance().getAppuserId());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        return jsonString;
+    }
+
+    public String getMomentSurveyEntryURL() throws JSONException {
+        String jsonString = "";
+        try {
+            String url;
+
+            String urlString = getUrlPrefix() + "appusers/" + RapidoReach.getInstance().getAppuserId() + "/moments";
+
+            RapidoReach tr = RapidoReach.getInstance();
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append(urlString + "?gps_id=").append(tr.getGpsId());
+            urlBuilder.append("&api_key=").append(tr.getApiKey());
+            urlBuilder.append("&user_id=").append(tr.getUserID());
+
+            if (RapidoReach.getInstance().resetProfiler) {
+                urlBuilder.append("&reset_profiler=").append("true");
+            }
+
+            url = urlBuilder.toString();
+
+            jsonString = getUrl(url);
+
+            //Log.d(TAG, "getMomentSurveyEntryURL: " + jsonString);
+
+            try {
+                JSONObject object = new JSONObject(jsonString);
+
+                String surveyEntryURL = object.getString("entry_url");
+                int surveyLength = object.getInt("loi");
+
+                if (surveyEntryURL != null && surveyEntryURL.length() > 1 && surveyLength > 0 && surveyLength < 31) {
+                    RapidoReach.getInstance().setMomentSurveyLength(surveyLength);
+
+                    RapidoReach.getInstance().setMomentEntryURL(surveyEntryURL);
+
+                }
+
+
+            } catch (JSONException e) {
+                //Log.d(TAG, e.toString());
+            }
+
+        } catch (IOException ioe) {
+            //Log.d(TAG, ioe.toString());
+        }
+
+        return jsonString;
+    }
+
+    public Drawable drawableFromUrl(String url) throws IOException {
+        Bitmap x;
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            x = BitmapFactory.decodeStream(input);
+            return new BitmapDrawable(RapidoReach.getInstance().getParentContext().getResources(), x);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String getMd5Hash(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String md5 = number.toString(16);
+
+            while (md5.length() < 32)
+                md5 = "0" + md5;
+
+            return md5;
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
+
+    public String checkAppuserRewards() throws JSONException {
+        Log.d(TAG, "Within checkAppuserRewards");
+        String jsonString = "";
+        try {
+            String url;
+
+            String rewardUrl = RapidoReach.getFullAPIUrl() + "/api/sdk/v2/appusers/" + RapidoReach.getInstance().getAppuserId() + "/appuser_rewards?api_key=" + RapidoReach.getInstance().getApiKey();
+
+            String encryptedString = this.getMd5Hash(rewardUrl + "12fb172e94cfcb20dd65c315336b919f");
+            String urlString = rewardUrl + "&enc=" + encryptedString;
+            Log.d(TAG, "Reward url "+urlString);
+            url = Uri.parse(urlString).buildUpon().build().toString();
+
+            jsonString = getUrl(url);
+            Log.d(TAG, jsonString);
+            try {
+                JSONObject object = new JSONObject(jsonString);
+                if(!object.getString("ErrorCode").equals("SUCCESS")){
+                    ErrorHandler.handle(object);
+                    return jsonString;
+                }
+                int pending_coins = 0;
+                pending_coins = object.getJSONArray("Data").getJSONObject(0).getInt("total_rewards");
+                String rewardIds = object.getJSONArray("Data").getJSONObject(0).getString("appuser_reward_ids");
+
+                if (pending_coins > 0 && (RapidoReach.getInstance().getRewardIds() != null && !RapidoReach.getInstance().getRewardIds().equals(rewardIds))) {
+                    RapidoReach.getInstance().setRewardIds(rewardIds);
+                    RapidoReach.getInstance().awardContent(pending_coins);
+                }
+
+            } catch (JSONException e) {
+                //Log.d(TAG, e.toString());
+            }
+
+        } catch (IOException ioe) {
+            //Log.d(TAG, ioe.toString());
+        }
+
+        return jsonString;
+    }
+
+    public void grantUserReward() {
+        try {
+
+            String urlString = getUrlPrefix() + "appuser_rewards/confirmed";
+
+            String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\",\"appuser_reward_ids\": " + "\"" + RapidoReach.getInstance().getRewardIds() + "\"" + "}";
+
+            URL url = new URL(urlString);
+            //Log.d(TAG, "grantUserReward "+url.toString());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+            String output;
+            while ((output = br.readLine()) != null) {
+
+            }
+
+            conn.disconnect();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createSurveySession() {
+        try {
+            String appuserId = RapidoReach.getInstance().getAppuserId();
+
+            String urlString = getUrlPrefix() + "appusers/" + appuserId + "/start_new_appuser_session";
+
+            //Log.d(TAG, "createSurveySession "+urlString);
+
+            URL url = new URL(urlString);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            String input = "{\"api_key\": \"" + RapidoReach.getInstance().getApiKey() + "\"" + "}";
+
+            //Log.d(TAG, "post body "+input);
+
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+            String output;
+            while ((output = br.readLine()) != null) {
+            }
+
+            conn.disconnect();
+
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+        }
+    }
+}
